@@ -1,5 +1,4 @@
-require "cropster_api/version"
+module CropsterApi; end
 
-module CropsterApi
-  # Your code goes here...
-end
+require "cropster_api/version"
+require "cropster_api/client"
