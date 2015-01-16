@@ -4,8 +4,8 @@ module CropsterApi
   class Config
     attr_accessor :username, :password, :groupcode
 
-    def basic_auth
-      {:username => username, :password => password}
+    def auth
+      { basic_auth: {:username => username, :password => password} }
     end
   end
 
@@ -33,15 +33,12 @@ module CropsterApi
 
         @config = Config.new
         @request_handler = RequestHandler.new
+
         yield config
       end
 
-      def auth
-        { :basic_auth => config.basic_auth }
-      end
-
       def request params={}
-        request_handler.trigger(auth, params)
+        request_handler.trigger(config.auth, params)
       end
 
       # &processingStep=coffee.roasting
