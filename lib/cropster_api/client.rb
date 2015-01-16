@@ -20,11 +20,11 @@ module CropsterApi
     def roasted_lots opts={}
       auth = opts.merge({ :basic_auth => basic_auth })
       
-      self.class.get("/lot?groupCode=PACT&processingStep=coffee.roasting", auth)
+      self.class.get("/lot?groupCode=#{groupcode}&processingStep=coffee.roasting", auth)
     end
 
     def green_lots
-      self.class.get("lot?groupCode=PACT&locationId=62205&processingStep=coffee.green")
+      self.class.get("lot?groupCode=#{groupcode}&locationId=62205&processingStep=coffee.green")
     end
   end
 end

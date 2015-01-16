@@ -17,7 +17,13 @@ describe CropsterApi::Client do
   # end
 
   describe '#roasted_lots' do
-    let(:client){ CropsterApi::Client.new({ username: ENV['USERNAME'], password: ENV['PASSWORD'] }) }
+    let(:client){ 
+      CropsterApi::Client.new(
+        username: ENV['USERNAME'],
+        password: ENV['PASSWORD'],
+        groupcode: ENV['GROUPCODE']
+      )
+    }
     
     it "retrieves roasted lots" do
       response = client.roasted_lots
