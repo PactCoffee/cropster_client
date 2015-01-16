@@ -5,7 +5,7 @@ module CropsterApi
     def handle_response(response)
       @code = response.code
 
-      @body = response[1..3].map do |item|
+      @body = response.map do |item|
         ResponseItem.new(item)
       end
 
