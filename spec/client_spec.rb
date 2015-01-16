@@ -29,7 +29,7 @@ describe CropsterApi::Client do
   end
 
   describe "#request" do
-    it "can send a request" do
+    it "#roasted_lots" do
       configure(client)
       response=client.request
 
