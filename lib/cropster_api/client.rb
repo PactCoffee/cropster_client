@@ -9,17 +9,30 @@ module CropsterApi
     end
   end
 
-  class Client
+  class RequestHandler
     include HTTParty
     base_uri 'https://c-sar.cropster.com/api/rest/v1'
 
+    def trigger auth, params={}
+      params = parameterize_for_http(params) 
+      self.class.get("/lot?groupCode=PACT#{params}", auth)
+    end
+
+    def parameterize_for_http(params={})
+      return "" if params == {}
+      params.to_a.reduce(""){|str,v| str+="&#{v[0]=v[1]}"}
+    end
+  end
+
+  class Client
     class << self
-      attr_reader :config
+      attr_reader :config, :request_handler
 
       def configure
         raise ArgumentError, "block not given" unless block_given?
 
         @config = Config.new
+        @request_handler = RequestHandler.new
         yield config
       end
 
@@ -27,14 +40,8 @@ module CropsterApi
         { :basic_auth => config.basic_auth }
       end
 
-      def roasted_lots params={}  
-        params = parameterize_for_http(params)  
-
-        self.get("/lot?groupCode=#{config.groupcode}#{params}", auth)
-      end
-
-      def parameterize_for_http(params={})
-        params.to_a.reduce(""){|str,v| str+="&#{v[0]=v[1]}"}
+      def request params={}
+        request_handler.trigger(auth, params)
       end
 
       # &processingStep=coffee.roasting

@@ -28,11 +28,11 @@ describe CropsterApi::Client do
     end
   end
 
-  describe '#roasted_lots' do
-    before { configure(client) }
-    
-    it "retrieves roasted lots" do
-      response = client.roasted_lots
+  describe "#request" do
+    it "can send a request" do
+      configure(client)
+      response=client.request
+
       expect(response.code).to eq 200
     end
   end
@@ -44,4 +44,19 @@ describe CropsterApi::Client do
   #   context "unauthorised" do
   #   end
   # end
+end
+
+describe CropsterApi::RequestHandler do
+  let(:request_handler){ CropsterApi::RequestHandler.new }
+  let(:auth){{
+    basic_auth: { 
+      :username=>ENV['USERNAME'],
+      :password=>ENV['PASSWORD']
+    }
+  }}
+
+  it 'handles requests' do
+    response = request_handler.trigger(auth)
+    expect(response.code).to eq 200
+  end
 end
