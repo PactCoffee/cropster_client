@@ -48,15 +48,20 @@ end
 
 describe CropsterApi::RequestHandler do
   let(:request_handler){ CropsterApi::RequestHandler.new }
-  let(:auth){{
-    basic_auth: { 
-      :username=>ENV['USERNAME'],
-      :password=>ENV['PASSWORD']
-    }
-  }}
+  let(:config){ double('Config') }
+
+  before do
+    allow(config).to receive(:auth).and_return({ basic_auth: { 
+        :username=>ENV['USERNAME'],
+        :password=>ENV['PASSWORD']
+      }
+    })
+
+    allow(config).to receive(:groupcode).and_return(ENV['GROUPCODE'])
+  end
 
   it 'handles requests' do
-    response = request_handler.trigger(auth)
+    response = request_handler.trigger(config)
     expect(response.code).to eq 200
   end
 

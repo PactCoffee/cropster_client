@@ -13,9 +13,9 @@ module CropsterApi
     include HTTParty
     base_uri 'https://c-sar.cropster.com/api/rest/v1'
 
-    def trigger auth, params={}
+    def trigger config, params={}
       params = parameterize_for_http(params) 
-      self.class.get("/lot?groupCode=PACT#{params}", auth)
+      self.class.get("/lot?groupCode=#{config.groupcode}#{params}", config.auth)
     end
 
     def parameterize_for_http(params={})
@@ -38,10 +38,8 @@ module CropsterApi
       end
 
       def request params={}
-        request_handler.trigger(config.auth, params)
+        request_handler.trigger(config, params)
       end
-
-      # &processingStep=coffee.roasting
 
       # def green_lots
       #   self.class.get("lot?groupCode=#{config.groupcode}&locationId=62205&processingStep=coffee.green")
