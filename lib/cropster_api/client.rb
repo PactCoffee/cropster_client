@@ -20,7 +20,7 @@ module CropsterApi
 
     def parameterize_for_http(params={})
       return "" if params == {}
-      params.to_a.reduce(""){|str,v| str+="&#{v[0]=v[1]}"}
+      params.to_a.reduce(""){|str,v| str+="&#{v[0]}=#{v[1]}"}
     end
   end
 

@@ -59,4 +59,11 @@ describe CropsterApi::RequestHandler do
     response = request_handler.trigger(auth)
     expect(response.code).to eq 200
   end
+
+  it 'formats hash params for http' do
+    params = request_handler.parameterize_for_http(
+      processingStep: 'coffee.roasting')
+
+    expect(params).to eq "&processingStep=coffee.roasting"
+  end
 end
