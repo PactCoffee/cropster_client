@@ -1,5 +1,4 @@
 require 'httparty'
-require 'json'
 
 module CropsterApi; end
 
