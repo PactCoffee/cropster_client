@@ -23,11 +23,21 @@ module CropsterApi
         yield config
       end
 
-      def roasted_lots opts={}
-        auth = opts.merge({ :basic_auth => config.basic_auth })
-        
-        self.get("/lot?groupCode=#{config.groupcode}&processingStep=coffee.roasting", auth)
+      def auth
+        { :basic_auth => config.basic_auth }
       end
+
+      def roasted_lots params={}  
+        params = parameterize_for_http(params)  
+
+        self.get("/lot?groupCode=#{config.groupcode}#{params}", auth)
+      end
+
+      def parameterize_for_http(params={})
+        params.to_a.reduce(""){|str,v| str+="&#{v[0]=v[1]}"}
+      end
+
+      # &processingStep=coffee.roasting
 
       # def green_lots
       #   self.class.get("lot?groupCode=#{config.groupcode}&locationId=62205&processingStep=coffee.green")
