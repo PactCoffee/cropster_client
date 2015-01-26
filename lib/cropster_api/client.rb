@@ -17,10 +17,6 @@ module CropsterApi
         response = request_handler.trigger(config, params)
         response_handler.handle_response(response)
       end
-
-      # def green_lots
-      #   self.class.get("lot?groupCode=#{config.groupcode}&locationId=62205&processingStep=coffee.green")
-      # end
     end
   end
 end
