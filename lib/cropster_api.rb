@@ -1,4 +1,5 @@
 require 'httparty'
+require 'active_support'
 
 module CropsterApi; end
 

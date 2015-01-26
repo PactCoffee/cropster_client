@@ -15,7 +15,7 @@ describe CropsterApi::RequestHandler do
   end
 
   it 'handles requests' do
-    response = request_handler.trigger(config)
+    response = request_handler.trigger(config, {type: 'all lots'})
     expect(response.code).to eq 200
   end
 
@@ -38,7 +38,7 @@ describe CropsterApi::RequestHandler do
     describe 'for a specific lot' do
       it 'generates the correct url' do
         url = request_handler.generate_url(
-          type: 'single_lot'
+          type: 'single lot',
           lot_id: 123
         )
 
@@ -49,8 +49,8 @@ describe CropsterApi::RequestHandler do
     describe 'for all lots' do
       it 'generates the correct url' do
         url = request_handler.generate_url(
-          type: 'all_lots'
-          processingStep: 'coffee.roasting',
+          type: 'all lots',
+          processing_step: 'coffee.roasting',
           location_id: 123
         )
 

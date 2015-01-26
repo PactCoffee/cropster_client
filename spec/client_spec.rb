@@ -10,6 +10,7 @@ end
 
 describe CropsterApi::Client do
   let(:client){ CropsterApi::Client }
+  let(:params){ {type: 'all lots'} }
 
   describe "#configuration" do
     context "errors" do
@@ -31,7 +32,7 @@ describe CropsterApi::Client do
   describe "#request" do
     it "#roasted_lots" do
       configure(client)
-      response=client.request
+      response=client.request(params)
 
       expect(response.code).to eq 200
     end
