@@ -36,19 +36,24 @@ module CropsterApi
 
       errors = []
       errors << "'lot_id' missing" if lot_id.nil?
-      errors << "'lot_id' should be an integer" unless lot_id.match(/\A[-+]?\d+\z/)
+      errors << "'lot_id' should be an integer" unless is_integer?(lot_id)
 
-      raise ArgumentError, errors.join(", ") unless errors.blank?
+      raise ArgumentError, errors.join(", ") unless errors.empty?
 
       "lot/#{lot_id}/transaction"
     end
 
     def all_lots_url(params={})
-      parameterize_for_http(params)
+      params = parameterize_for_http(params)
+      "lot?groupCode=#{ENV['GROUPCODE']}#{params}"
     end
 
     def location_url(params={})
+      "location?groupCode=#{ENV['GROUPCODE']}"
+    end
 
+    def is_integer?(num)
+      num.class.name == 'Fixnum' || lot_id.match(/\A[-+]?\d+\z/)
     end
   end
 end
