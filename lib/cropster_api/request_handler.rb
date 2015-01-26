@@ -1,12 +1,20 @@
 module CropsterApi
   class RequestHandler
     include HTTParty
-    base_uri 'https://c-sar.cropster.com/api/rest/v1'
+
+    BASE = 'c-sar.cropster.com/api/rest/'
+    VERSION = 'v1'
+
+    base_uri "https://#{BASE}#{VERSION}"
+
+    attr_reader :config
 
     def trigger config, params={}
+      @config = config
+
       url = generate_url(params)
       # params = parameterize_for_http(params)
-      self.class.get("/lot?groupCode=#{config.groupcode}", config.auth)
+      self.class.get(url, config.auth)
     end
 
     def parameterize_for_http(params={})
@@ -40,16 +48,17 @@ module CropsterApi
 
       raise ArgumentError, errors.join(", ") unless errors.empty?
 
-      "lot/#{lot_id}/transaction"
+      "/lot/#{lot_id}/transaction"
     end
 
     def all_lots_url(params={})
       params = parameterize_for_http(params)
-      "lot?groupCode=#{ENV['GROUPCODE']}#{params}"
+      "/lot?groupCode=#{config.groupcode}#{params}"
     end
 
     def location_url(params={})
-      "location?groupCode=#{ENV['GROUPCODE']}"
+      params = parameterize_for_http(params)
+      "/location?groupCode=#{config.groupcode}#{params}"
     end
 
     def is_integer?(num)

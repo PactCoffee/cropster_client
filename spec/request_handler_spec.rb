@@ -12,6 +12,7 @@ describe CropsterApi::RequestHandler do
     })
 
     allow(config).to receive(:groupcode).and_return(ENV['GROUPCODE'])
+    request_handler.instance_variable_set(:@config, config)
   end
 
   it 'handles requests' do
@@ -42,7 +43,7 @@ describe CropsterApi::RequestHandler do
           lot_id: 123
         )
 
-        expect(url).to eq 'lot/123/transaction'
+        expect(url).to eq '/lot/123/transaction'
       end
     end
 
@@ -52,7 +53,7 @@ describe CropsterApi::RequestHandler do
           type: 'all lots'
         )
 
-        expect(url).to eq "lot?groupCode=#{ENV['GROUPCODE']}"
+        expect(url).to eq "/lot?groupCode=#{ENV['GROUPCODE']}"
       end
 
       it 'accepts params' do
@@ -62,7 +63,7 @@ describe CropsterApi::RequestHandler do
           processing_step: 'coffee.roasting'
         )
 
-        expect(url).to eq "lot?groupCode=#{ENV['GROUPCODE']}&locationId=123&processingStep=coffee.roasting"
+        expect(url).to eq "/lot?groupCode=#{ENV['GROUPCODE']}&locationId=123&processingStep=coffee.roasting"
       end
     end
 
@@ -72,7 +73,7 @@ describe CropsterApi::RequestHandler do
           type: 'location'
         )
 
-        expect(url).to eq "location?groupCode=#{ENV['GROUPCODE']}"
+        expect(url).to eq "/location?groupCode=#{ENV['GROUPCODE']}"
       end
     end
   end
