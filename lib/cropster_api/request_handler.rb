@@ -11,7 +11,7 @@ module CropsterApi
 
     def parameterize_for_http(params={})
       return "" if params.empty?
-      params.to_a.reduce(""){ |str,val| str+="&#{val[0]}=#{val[1]}" }
+      params.to_a.reduce(""){ |str,val| str+="&#{val[0].to_s.camelize(:lower)}=#{val[1]}" }
     end
 
     def generate_url(params={})
