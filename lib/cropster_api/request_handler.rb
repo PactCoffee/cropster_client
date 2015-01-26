@@ -1,30 +1,33 @@
 module CropsterApi
   class RequestHandler
     include HTTParty
+    include CropsterApi::Helpers
 
     BASE = 'c-sar.cropster.com/api/rest/'
     VERSION = 'v1'
 
     base_uri "https://#{BASE}#{VERSION}"
 
-    attr_reader :config, :type, :params
+    attr_reader :config, :type, :lot_id, :params, :http_params
 
     def trigger config, params={}
       @config = config
       @type = params.extract!(:type)[:type]
+      @lot_id = params.extract!(:lot_id)[:lot_id]
       @params = params
+      @http_params = parameterize_for_http
 
       url = generate_url
       self.class.get(url, config.auth)
     end
 
     def parameterize_for_http
-      return "" if @params.blank?
-      @params.to_a.reduce(""){ |str,val| str+="&#{val[0].to_s.camelize(:lower)}=#{val[1]}" }
+      return "" if params.blank?
+      params.to_a.reduce(""){ |str,v| str+="&#{camelize(v[0])}=#{v[1]}" }
     end
 
     def generate_url
-      raise ArgumentError, "'type' missing" if @type.nil?
+      raise ArgumentError, "'type' missing" if type.nil?
 
       case type
         when 'single lot'
@@ -39,8 +42,6 @@ module CropsterApi
     end
 
     def lot_url
-      lot_id = @params[:lot_id]
-
       errors = []
       errors << "'lot_id' missing" if lot_id.nil?
       errors << "'lot_id' should be an integer" unless is_integer?(lot_id)
@@ -51,17 +52,11 @@ module CropsterApi
     end
 
     def all_lots_url
-      @params = parameterize_for_http
-      "/lot?groupCode=#{config.groupcode}#{@params}"
+      "/lot?groupCode=#{config.groupcode}#{http_params}"
     end
 
     def location_url
-      @params = parameterize_for_http
-      "/location?groupCode=#{config.groupcode}#{@params}"
-    end
-
-    def is_integer?(num)
-      num.class.name == 'Fixnum' || lot_id.match(/\A[-+]?\d+\z/)
+      "/location?groupCode=#{config.groupcode}#{http_params}"
     end
   end
 end

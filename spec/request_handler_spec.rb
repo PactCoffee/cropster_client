@@ -46,7 +46,7 @@ describe CropsterApi::RequestHandler do
 
     describe 'for a specific lot' do
       it 'generates the correct url' do
-        set_var(:@params, { lot_id: 123 })
+        set_var(:@lot_id, 123)
         set_var(:@type, 'single lot')
 
         url = request_handler.generate_url
@@ -65,10 +65,7 @@ describe CropsterApi::RequestHandler do
       it 'accepts params' do
         set_var(:@type, 'all lots')
 
-        set_var(:@params, {
-          location_id: 123,
-          processing_step: 'coffee.roasting'
-        })
+        set_var(:@http_params, "&locationId=123&processingStep=coffee.roasting")
 
         url = request_handler.generate_url
         expect(url).to eq "/lot?groupCode=#{ENV['GROUPCODE']}&locationId=123&processingStep=coffee.roasting"
