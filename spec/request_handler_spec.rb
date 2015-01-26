@@ -35,23 +35,36 @@ describe CropsterApi::RequestHandler do
       expect(params).to eq "&processingStep=coffee.roasting&location_id=123"
     end
 
-    context 'for transactions' do
+    describe 'for a specific lot' do
       it 'generates the correct url' do
-        url = request_handler.generate_transaction_url(
-          transaction: true,
-          lotId: 123)
+        url = request_handler.generate_url(
+          type: 'single_lot'
+          lot_id: 123
+        )
 
         expect(url).to eq 'lot/123/transaction'
       end
     end
 
-    context 'for non-transaction requests' do
+    describe 'for all lots' do
       it 'generates the correct url' do
-        url = request_handler.generate_transaction_url(
+        url = request_handler.generate_url(
+          type: 'all_lots'
           processingStep: 'coffee.roasting',
-          location_id: 123)
+          location_id: 123
+        )
 
-        expect(url).to eq "lot?groupCode=#{ENV['GROUPCODE']}&lot/123/transaction"
+        expect(url).to eq "lot?groupCode=#{ENV['GROUPCODE']}&locationId=123&processingStep=coffee.roasting"
+      end
+    end
+
+    describe 'for locations' do
+    it 'generates the correct url' do
+        url = request_handler.generate_url(
+          type: 'location'
+        )
+
+        expect(url).to eq "location?groupCode=#{ENV['GROUPCODE']}"
       end
     end
   end
